@@ -1,0 +1,8 @@
+private.pem
+vendor/
+my-test.sh
+gcb-bridge.exe
+gcb-bridge
+*.json
+
+!github-event-*.json
