@@ -91,6 +91,7 @@ func StartBuild(wg *sync.WaitGroup, repo *app.Repo, name, buildFile string) {
 	subsList.Push("BRANCH_NAME=" + repo.Branch)
 	subsList.Push("TAG_NAME=" + repo.Tag)
 	subsList.Push("COMMIT_SHA=" + repo.AfterSHA)
+	subsList.Push("SHORT_SHA=" + repo.AfterSHA[:7])
 	subsList.Push("_GITHUB_INSTALLATION_ID=" + repo.InstallationID)
 	subsList.Push("_GITHUB_REPOSITORY_NODE_ID=" + repo.RepositoryNodeID)
 	subsList.Push("_GITHUB_CHECKRUN_ID=" + runID)
