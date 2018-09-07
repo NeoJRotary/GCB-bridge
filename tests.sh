@@ -2,6 +2,14 @@
 
 # test sets be run inside test docker
 
+echo "RUN TESTS ~"
+
+if [ "$TEST_APP" = "1" ]
+then
+  echo "TEST_APP"
+  go test -v ./app
+fi
+
 if [ "$TEST_WEBHOOK" = "1" ]
 then
   echo "TEST_WEBHOOK"

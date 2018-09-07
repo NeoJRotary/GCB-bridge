@@ -27,6 +27,10 @@ func (trg *trigger) debugLog(a ...interface{}) {
 	if !DEBUG {
 		return
 	}
+	trg.log(fmt.Sprint(a...))
+}
+
+func (trg *trigger) log(a ...interface{}) {
 	trg.cb.Log.Push(fmt.Sprint(a...))
 }
 
@@ -68,8 +72,14 @@ func (trg *trigger) validBranch(branch string) bool {
 	trg.debugLog("validBranch: branch[", branch, "] trg.Branches:", trg.Branches)
 
 	// go through all regex
-	for _, reg := range trg.Branches {
-		if regexp.MustCompile(reg).MatchString(branch) {
+	for _, expr := range trg.Branches {
+		regx, err := regexp.Compile(expr)
+		if D.IsErr(err) {
+			trg.log("validTag: regexp err", err)
+			continue
+		}
+
+		if regx.MatchString(branch) {
 			return true
 		}
 	}
@@ -89,9 +99,15 @@ func (trg *trigger) validAssociatedBases(bases []string) bool {
 	trg.debugLog("validAssociatedBases: bases:", bases, "PullRequestBases:", trg.PullRequestBases)
 
 	// go through all regex
-	for _, reg := range trg.PullRequestBases {
+	for _, expr := range trg.PullRequestBases {
 		for _, base := range bases {
-			if regexp.MustCompile(reg).MatchString(base) {
+			regx, err := regexp.Compile(expr)
+			if D.IsErr(err) {
+				trg.log("validTag: regexp err", err)
+				continue
+			}
+
+			if regx.MatchString(base) {
 				return true
 			}
 		}
@@ -112,8 +128,14 @@ func (trg *trigger) validTag(tag string) bool {
 	trg.debugLog("validTag: tag[", tag, "] trg.Tags:", trg.Tags)
 
 	// go through all regex
-	for _, reg := range trg.Tags {
-		if regexp.MustCompile(reg).MatchString(tag) {
+	for _, expr := range trg.Tags {
+		regx, err := regexp.Compile(expr)
+		if D.IsErr(err) {
+			trg.log("validTag: regexp err", err)
+			continue
+		}
+
+		if regx.MatchString(tag) {
 			return true
 		}
 	}
@@ -133,8 +155,14 @@ func (trg *trigger) validPullRequest(base string) bool {
 	trg.debugLog("validPullRequest: base[", base, "] trg.PullRequestBases:", trg.PullRequestBases)
 
 	// go through all regex
-	for _, reg := range trg.PullRequestBases {
-		if regexp.MustCompile(reg).MatchString(base) {
+	for _, expr := range trg.PullRequestBases {
+		regx, err := regexp.Compile(expr)
+		if D.IsErr(err) {
+			trg.log("validTag: regexp err", err)
+			continue
+		}
+
+		if regx.MatchString(base) {
 			return true
 		}
 	}

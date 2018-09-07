@@ -46,18 +46,20 @@ func GetAccessToken(installationID string) string {
 	if installationID == "" {
 		return ""
 	}
+	return getToken(installationID, time.Now().Add(time.Minute*-1))
+}
 
+func getToken(installationID string, current time.Time) string {
 	var tkn *accessToken
 
 	// reuse token if there is and before expired time
 	tkn, ok := tokenCache[installationID]
 	if ok {
-		if tkn.ExpiredTime.Before(time.Now().Truncate(time.Minute)) {
+		if tkn.ExpiredTime.After(current) {
 			return tkn.Token
 		}
-	} else {
-		tkn = &accessToken{}
 	}
+	tkn = &accessToken{}
 
 	// start to request new access token
 
